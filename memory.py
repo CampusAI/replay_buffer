@@ -5,8 +5,8 @@ import random
 class ReplayBuffer(ABC):
 
     def __init__(self, max_size):
-        self.max_size = max_size
-        self.buffer = collections.deque(maxlen=max_size)
+        self.max_size = int(max_size)
+        self.buffer = collections.deque(maxlen=self.max_size)
     
     def sample(self, batch_size):
         assert len(self.buffer) >= batch_size, \
