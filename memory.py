@@ -2,17 +2,13 @@ from abc import ABC, abstractmethod
 import collections
 import random
 
-class ReplayBuffer(ABC):
+class ReplayBuffer(collections.deque):
 
     def __init__(self, max_size):
-        self.max_size = int(max_size)
-        self.buffer = collections.deque(maxlen=self.max_size)
+        super().__init__([], maxlen=int(max_size))
     
     def sample(self, batch_size):
-        assert len(self.buffer) >= batch_size, \
-            f'Cannot sample {batch_size} elements from buffer of size {self.cur_len}'
-        indices = random.sample(range(len(self.buffer)), batch_size)
-        return [self.buffer[i] for i in indices]
-
-    def insert(self, element):
-        self.buffer.append(element)
+        assert len(self) >= batch_size, \
+            f'Cannot sample {batch_size} elements from buffer of size {len(self)}'
+        indices = random.sample(range(len(self)), batch_size)
+        return [self[i] for i in indices]
